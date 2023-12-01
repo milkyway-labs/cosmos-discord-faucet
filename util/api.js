@@ -37,20 +37,29 @@ module.exports = {
         prefix: process.env.ADDRESS_PREFIX,
       }
     );
-    const amount = {
+    const amount_tia = {
       denom: process.env.DENOMINATION,
       amount: process.env.AMOUNT,
     };
+    const amount_osmo = {
+      denom: "uosmo",
+      amount: "1000000",
+    };
 
-    const result = await client.sendTokens(address.address, addr, [amount], {
-      amount: [
-        {
-          denom: `${process.env.TX_FEE_DENOMINATION}`,
-          amount: `${process.env.TX_FEE_AMOUNT}`,
-        },
-      ],
-      gas: `${process.env.TX_GAS_AMOUNT}`, // 180k
-    });
+    const result = await client.sendTokens(
+      address.address,
+      addr,
+      [amount_tia, amount_osmo],
+      {
+        amount: [
+          {
+            denom: `${process.env.TX_FEE_DENOMINATION}`,
+            amount: `${process.env.TX_FEE_AMOUNT}`,
+          },
+        ],
+        gas: `${process.env.TX_GAS_AMOUNT}`, // 180k
+      }
+    );
     return result;
   },
 };
