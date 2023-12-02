@@ -1,5 +1,6 @@
 const api = require("../util/api");
-const { CheckIn, VerifyAddress } = require("../util/registry");
+const { CheckIn } = require("../util/registry");
+const { VerifyAddress } = require("../util/api");
 
 module.exports = (addr, user) => {
   VerifyAddress(addr);
