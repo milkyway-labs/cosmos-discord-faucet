@@ -45,22 +45,13 @@ client.on(Events.MessageCreate, async (m, k) => {
             const result = await Commands.request(address, m.author.toString());
             result.forEach((result, i) => {
               m.channel.send(
-                `${m.author.toString()} - \`${JSON.stringify(
-                  {
-                    chain: i === 0 ? "osmosis" : "celestia",
-                    transaction: result.transactionHash,
-                    check:
-                      i === 0
-                        ? "https://osmosis-lcd.devnet.milkyway.zone/txs/" +
-                          result.transactionHash
-                        : "https://celestia-lcd.devnet.milkyway.zone/txs/" +
-                          result.transactionHash,
-                    block: result.height,
-                    gas: result.gasUsed,
-                  },
-                  null,
-                  2
-                )}\``
+                `${m.author.toString()} - \`${
+                  i === 0
+                    ? "https://osmosis-lcd.devnet.milkyway.zone/txs/" +
+                      result.transactionHash
+                    : "https://celestia-lcd.devnet.milkyway.zone/txs/" +
+                      result.transactionHash
+                }\``
               );
             });
           }
