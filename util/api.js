@@ -34,7 +34,7 @@ module.exports = {
 
     const wallet = await FaucetWallet();
     const address = await FaucetAccount();
-    const omosisFaucetAddr = address.address;
+    const osmosisFaucetAddr = address.address;
     const celestiaFaucetAddr = encoding.toBech32(
       "celestia",
       encoding.fromBech32(osmosisFaucetAddr).data
@@ -56,7 +56,7 @@ module.exports = {
     };
 
     const result1 = await osmosisClient.sendTokens(
-      omosisFaucetAddr,
+      osmosisFaucetAddr,
       osmosisAddr,
       [amount_tia, amount_osmo],
       {
