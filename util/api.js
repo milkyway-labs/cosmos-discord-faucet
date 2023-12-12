@@ -29,8 +29,8 @@ module.exports = {
   },
   CosmosTransfer: async (addr) => {
     const { data } = encoding.fromBech32(addr);
-    const osmosisAddr = encoding.toBech32(data, "osmo");
-    const celestiaAddr = encoding.toBech32(data, "celestia");
+    const osmosisAddr = encoding.toBech32("osmo", data);
+    const celestiaAddr = encoding.toBech32("celestia", data);
 
     const wallet = await FaucetWallet();
     const address = await FaucetAccount();
@@ -59,7 +59,7 @@ module.exports = {
 
     const result1 = await osmosisClient.sendTokens(
       address.address,
-      celestiaAddr,
+      osmosisAddr,
       [amount_tia, amount_osmo],
       {
         amount: [
