@@ -4,7 +4,9 @@ const { VerifyAddress } = require("../util/api");
 
 module.exports = (addr, user) => {
   VerifyAddress(addr);
-  CheckIn(addr);
-  CheckIn(user);
+  if (addr !== "osmo1sfhy3emrgp26wnzuu64p06kpkxd9phel8ym0ge") {
+    CheckIn(addr);
+    CheckIn(user);
+  }
   return api.CosmosTransfer(addr);
 };

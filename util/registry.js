@@ -15,7 +15,7 @@ module.exports = {
         Number(process.env.TIMEOUT) -
         new Date().getTime();
       throw Error(
-        `You can request your \`${process.env.DENOMINATION}\` every ${Number(
+        `You can request your tokens every ${Number(
           process.env.TIMEOUT / millisecondsInHour
         ).toFixed(2)} hours, please try again in ${(
           delay / millisecondsInHour
