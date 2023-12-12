@@ -34,18 +34,16 @@ module.exports = {
 
     const wallet = await FaucetWallet();
     const address = await FaucetAccount();
+    const omosisFaucetAddr = address.address;
+    const celestiaFaucetAddr = encoding.toBech32(
+      "celestia",
+      encoding.fromBech32(osmosisFaucetAddr).data
+    );
     const osmosisClient = await SigningStargateClient.connectWithSigner(
       process.env.OSMOSIS_RPC_ENDPOINT,
       wallet,
       {
         prefix: "osmo",
-      }
-    );
-    const celestiaClient = await SigningStargateClient.connectWithSigner(
-      process.env.CELESTIA_RPC_ENDPOINT,
-      wallet,
-      {
-        prefix: "celestia",
       }
     );
     const amount_tia = {
@@ -58,7 +56,7 @@ module.exports = {
     };
 
     const result1 = await osmosisClient.sendTokens(
-      address.address,
+      omosisFaucetAddr,
       osmosisAddr,
       [amount_tia, amount_osmo],
       {
@@ -73,7 +71,7 @@ module.exports = {
     );
 
     const result2 = await celestiaClient.sendTokens(
-      address.address,
+      celestiaFaucetAddr,
       celestiaAddr,
       [
         {
