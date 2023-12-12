@@ -46,6 +46,13 @@ module.exports = {
         prefix: "osmo",
       }
     );
+    const celestiaClient = await SigningStargateClient.connectWithSigner(
+      process.env.CELESTIA_RPC_ENDPOINT,
+      wallet,
+      {
+        prefix: "celestia",
+      }
+    );
     const amount_tia = {
       denom: process.env.DENOMINATION,
       amount: process.env.AMOUNT,
@@ -70,7 +77,7 @@ module.exports = {
       }
     );
 
-    const result2 = await osmosisClient.sendTokens(
+    const result2 = await celestiaClient.sendTokens(
       celestiaFaucetAddr,
       celestiaAddr,
       [
