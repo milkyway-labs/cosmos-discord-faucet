@@ -70,7 +70,7 @@ module.exports = {
       }
     );
 
-    const result2 = await celestiaClient.sendTokens(
+    const result2 = await osmosisClient.sendTokens(
       celestiaFaucetAddr,
       celestiaAddr,
       [
