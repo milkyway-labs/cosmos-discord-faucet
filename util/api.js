@@ -7,7 +7,7 @@ module.exports = {
   VerifyAddress: (addr) => {
     try {
       const { prefix } = encoding.fromBech32(addr);
-      if (prefix !== process.env.ADDRESS_PREFIX) {
+      if (prefix !== "osmo" && prefix !== "celestia") {
         throw Error(`${prefix} prefix is not supported`);
       }
     } catch (err) {
@@ -25,16 +25,27 @@ module.exports = {
     );
   },
   CosmosGetNodeStatus: () => {
-    return axios.get(`${process.env.RPC_ENDPOINT}/status`);
+    return axios.get(`${process.env.OSMOSIS_RPC_ENDPOINT}/status`);
   },
   CosmosTransfer: async (addr) => {
+    const { data } = encoding.fromBech32(addr);
+    const osmosisAddr = encoding.toBech32(data, "osmo");
+    const celestiaAddr = encoding.toBech32(data, "celestia");
+
     const wallet = await FaucetWallet();
     const address = await FaucetAccount();
-    const client = await SigningStargateClient.connectWithSigner(
-      process.env.RPC_ENDPOINT,
+    const osmosisClient = await SigningStargateClient.connectWithSigner(
+      process.env.OSMOSIS_RPC_ENDPOINT,
       wallet,
       {
-        prefix: process.env.ADDRESS_PREFIX,
+        prefix: "osmo",
+      }
+    );
+    const celestiaClient = await SigningStargateClient.connectWithSigner(
+      process.env.CELESTIA_RPC_ENDPOINT,
+      wallet,
+      {
+        prefix: "celestia",
       }
     );
     const amount_tia = {
@@ -46,9 +57,9 @@ module.exports = {
       amount: "1000000",
     };
 
-    const result = await client.sendTokens(
+    const result1 = await osmosisClient.sendTokens(
       address.address,
-      addr,
+      celestiaAddr,
       [amount_tia, amount_osmo],
       {
         amount: [
@@ -60,6 +71,26 @@ module.exports = {
         gas: `${process.env.TX_GAS_AMOUNT}`, // 180k
       }
     );
-    return result;
+
+    const result2 = await celestiaClient.sendTokens(
+      address.address,
+      celestiaAddr,
+      [
+        {
+          denom: "utia",
+          amount: "1000000",
+        },
+      ],
+      {
+        amount: [
+          {
+            denom: `utia`,
+            amount: "21000",
+          },
+        ],
+        gas: `${process.env.TX_GAS_AMOUNT}`, // 180k
+      }
+    );
+    return [result1, result2];
   },
 };
