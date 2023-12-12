@@ -32,23 +32,20 @@ module.exports = {
     const osmosisAddr = encoding.toBech32("osmo", data);
     const celestiaAddr = encoding.toBech32("celestia", data);
 
-    const wallet = await FaucetWallet();
-    const address = await FaucetAccount();
-    const osmosisFaucetAddr = address.address;
-    const celestiaFaucetAddr = encoding.toBech32(
-      "celestia",
-      encoding.fromBech32(osmosisFaucetAddr).data
-    );
+    const osmosisFaucetWallet = await FaucetWallet("osmo");
+    const osmosisFaucetAddr = (await FaucetAccount("osmo")).address;
+    const celestiaFaucetWallet = await FaucetWallet("celestia");
+    const celestiaFaucetAddr = (await FaucetAccount("celestia")).address;
     const osmosisClient = await SigningStargateClient.connectWithSigner(
       process.env.OSMOSIS_RPC_ENDPOINT,
-      wallet,
+      osmosisFaucetWallet,
       {
         prefix: "osmo",
       }
     );
     const celestiaClient = await SigningStargateClient.connectWithSigner(
       process.env.CELESTIA_RPC_ENDPOINT,
-      wallet,
+      celestiaFaucetWallet,
       {
         prefix: "celestia",
       }
@@ -90,7 +87,7 @@ module.exports = {
         amount: [
           {
             denom: `utia`,
-            amount: "21000",
+            amount: "35000",
           },
         ],
         gas: `${process.env.TX_GAS_AMOUNT}`, // 180k

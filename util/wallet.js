@@ -1,16 +1,16 @@
 const { DirectSecp256k1HdWallet } = require("@cosmjs/proto-signing");
 module.exports = {
-  FaucetAccount: async () => {
+  FaucetAccount: async (prefix) => {
     const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
       process.env.MNEMONIC,
-      { prefix: process.env.ADDRESS_PREFIX }
+      { prefix }
     );
     const [firstAccount] = await wallet.getAccounts();
     return firstAccount;
   },
-  FaucetWallet: async () => {
+  FaucetWallet: async (prefix) => {
     return DirectSecp256k1HdWallet.fromMnemonic(process.env.MNEMONIC, {
-      prefix: process.env.ADDRESS_PREFIX,
+      prefix,
     });
   },
 };
